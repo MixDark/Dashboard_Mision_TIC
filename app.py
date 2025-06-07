@@ -4,10 +4,29 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 import numpy as np
 import os
+import requests
+from io import StringIO
 
-# Cargar datos
-df = pd.read_csv("Mision_TIC_2020_100_mil_programadores.csv")
-df['FECHA_CORTE'] = pd.to_datetime(df['FECHA_CORTE'])
+# ID del archivo en Google Drive (reemplaza esto)
+FILE_ID = "1sEcYdeZ5f3JlQwIfn2JtXuD_VaaEiD-7"
+
+def load_csv_from_drive(file_id):
+    # Descargar el archivo como texto
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    response = requests.get(url)
+    response.raise_for_status()  # Verifica errores
+    
+    # Convertir a DataFrame
+    return pd.read_csv(StringIO(response.text))
+
+# Cargar datos desde Google Drive
+try:
+    df = load_csv_from_drive(FILE_ID)
+    df['FECHA_CORTE'] = pd.to_datetime(df['FECHA_CORTE'])
+except Exception as e:
+    print(f"Error al cargar el CSV: {e}")
+    # Puedes agregar un dataframe vacío como respaldo
+    df = pd.DataFrame()
 
 # Inicializar app con Bootstrap tema oscuro
 app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
@@ -368,4 +387,4 @@ def update_graphs(departamento):
 # Ejecutar
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
-    app.run_server(debug=False, host='0.0.0.0', port=port)
+    app.run(debug=False, host='0.0.0.0', port=port)
