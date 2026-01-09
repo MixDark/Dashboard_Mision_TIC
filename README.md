@@ -81,18 +81,6 @@ FILE_ID = "1sEcYdeZ5f3JlQwIfn2JtXuD_VaaEiD-7"
 
 Si deseas usar tus propios datos, reemplaza este ID con el de tu archivo de Google Drive.
 
-## 📚 Dependencias principales
-
-| Paquete | Versión | Propósito |
-|---------|---------|----------|
-| dash | 2.9.3 | Framework web para dashboards interactivos |
-| plotly | 5.14.1 | Biblioteca de gráficos interactivos |
-| dash-bootstrap-components | 1.4.1 | Componentes Bootstrap para Dash |
-| pandas | 1.5.3 | Manipulación y análisis de datos |
-| numpy | 1.24.3 | Computación numérica |
-| requests | 2.32.3 | Requests HTTP |
-| gunicorn | 23.0.0 | Servidor WSGI para producción |
-
 ## 🎨 Paleta de colores
 
 El dashboard utiliza la siguiente paleta de colores:
