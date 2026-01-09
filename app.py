@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import os
 import requests
+import webbrowser
 from io import StringIO
 
 FILE_ID = "1sEcYdeZ5f3JlQwIfn2JtXuD_VaaEiD-7"
@@ -24,6 +25,8 @@ except Exception as e:
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 app.title = "Dashboard Ejecutivo - Misión TIC 2020"
+
+# Servidor WSGI para producción con Gunicorn
 server = app.server
 
 colors = {
@@ -224,5 +227,20 @@ def update_graphs(departamento):
     return resumen_cards, fig1, fig2, fig3, fig4
 
 if __name__ == '__main__':
+    from waitress import serve
+    import threading
+    import time
+    
     port = int(os.environ.get('PORT', 8080))
-    app.run(debug=False, host='0.0.0.0', port=port)
+    url = f"http://localhost:{port}"
+    
+    # Abrir navegador después de un pequeño delay
+    def open_browser():
+        time.sleep(2)
+        webbrowser.open(url)
+    
+    thread = threading.Thread(target=open_browser, daemon=True)
+    thread.start()
+    
+    print(f"Iniciando servidor WSGI Waitress en {url}")
+    serve(server, host='0.0.0.0', port=port)
